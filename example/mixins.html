@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>mixins</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width,inital-scale=1">
+	<script type="text/javascript" src="../assets/js/vue.js"></script>
+</head>
+<body>
+	<h1>mixins</h1>
+	<hr>
+	<div id="app">
+		{{num}}
+		<p><button @click="add">add</button></p>
+	</div>
+	<script type="text/javascript">
+		var addConsole={
+			updated:function(){
+				console.log('数据发生变化，变成了'+this.num);
+			}
+		};
+		Vue.mixin({
+			updated:function(){
+				console.log('我是全局的混入');//全局混入的先执行，然后是构造器里的混入，最后原生的update后执行
+			}
+		});
+
+		var app = new Vue({
+			el:'#app',
+			data:{
+				num:1,
+			},
+			methods:{
+				add:function(){
+					this.num++;
+				}
+			},
+			updated:function(){
+				console.log("我是原生的update");
+			},
+			mixins:[addConsole]//混入的先执行，原生的后执行，混入的是数组
+		})
+	</script>
+</body>
+</html>
